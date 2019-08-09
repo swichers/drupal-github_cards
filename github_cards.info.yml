@@ -1,0 +1,5 @@
+name: 'GitHub Cards'
+type: module
+description: 'GitHub user and repo cards.'
+core: 8.x
+package: 'GitHub'

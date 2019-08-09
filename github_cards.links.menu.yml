@@ -1,0 +1,8 @@
+
+# GitHub Card menu items definition
+entity.github_card.collection:
+  title: 'GitHub Card'
+  route_name: entity.github_card.collection
+  description: 'List GitHub Cards'
+  parent: system.admin_content
+  weight: 99

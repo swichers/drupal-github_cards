@@ -1,0 +1,17 @@
+{
+    "name": "drupal/github_cards",
+    "type": "drupal-module",
+    "description": "GitHub user and repo cards.",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/github_cards",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/github_cards",
+        "source": "http://cgit.drupalcode.org/github_cards"
+    },
+    "require": {
+        "knplabs/github-api": "^2.12@dev",
+        "php-http/guzzle6-adapter": "^1.1"
+    }
+}

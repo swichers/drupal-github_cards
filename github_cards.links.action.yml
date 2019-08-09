@@ -1,0 +1,5 @@
+entity.github_card.add_form:
+  route_name: entity.github_card.add_form
+  title: 'Add GitHub Card'
+  appears_on:
+    - entity.github_card.collection

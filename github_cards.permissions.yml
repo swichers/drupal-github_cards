@@ -1,0 +1,19 @@
+add github card entities:
+  title: 'Create new GitHub Card entities'
+
+administer github card entities:
+  title: 'Administer GitHub Card entities'
+  description: 'Allow to access the administration form to configure GitHub Card entities.'
+  restrict access: true
+
+delete github card entities:
+  title: 'Delete GitHub Card entities'
+
+edit github card entities:
+  title: 'Edit GitHub Card entities'
+
+view published github card entities:
+  title: 'View published GitHub Card entities'
+
+view unpublished github card entities:
+  title: 'View unpublished GitHub Card entities'
