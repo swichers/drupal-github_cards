@@ -10,9 +10,9 @@ use Github\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class GitHubCardsGitHubService.
+ * Class GitHubCardsInfoService.
  */
-class GitHubCardsGitHubService  implements ContainerInjectionInterface, GitHubCardsGitHubServiceInterface {
+class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCardsInfoServiceInterface {
 
   /**
    * Drupal\Core\Cache\CacheBackendInterface definition.
@@ -41,7 +41,7 @@ class GitHubCardsGitHubService  implements ContainerInjectionInterface, GitHubCa
   protected $githubClient;
 
   /**
-   * Constructs a new GitHubCardsGitHubService object.
+   * Constructs a new GitHubCardsInfoService object.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_default
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager

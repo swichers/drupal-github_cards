@@ -9,6 +9,6 @@ services:
   github_cards.client:
     class: Github\Client
     factory: ['@github_cards.client.factory', 'createGitHubClient']
-  github_cards.github:
-    class: Drupal\github_cards\Service\GitHubCardsGitHubService
+  github_cards.github_info:
+    class: Drupal\github_cards\Service\GitHubCardsInfoService
     arguments: ['@cache.default', '@entity_type.manager','@logger.channel.github_cards', '@github_cards.client']

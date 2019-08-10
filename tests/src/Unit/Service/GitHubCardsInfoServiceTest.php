@@ -7,13 +7,13 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\github_cards\Service\GitHubCardsGitHubService;
+use Drupal\github_cards\Service\GitHubCardsInfoService;
 use Drupal\Tests\UnitTestCase;
 use Github\Api\Repo;
 use Github\Api\User;
 use Github\Client;
 
-class GitHubCardsGitHubServiceTest extends UnitTestCase {
+class GitHubCardsInfoServiceTest extends UnitTestCase {
 
   /**
    * Container builder helper.
@@ -27,7 +27,7 @@ class GitHubCardsGitHubServiceTest extends UnitTestCase {
   protected $testRepoName;
 
   public function testParseResourceUrl() {
-    $ghc = GitHubCardsGitHubService::create($this->container);
+    $ghc = GitHubCardsInfoService::create($this->container);
 
     $user_name = $this->randomMachineName();
     $repo_name = $this->randomMachineName();
@@ -70,7 +70,7 @@ class GitHubCardsGitHubServiceTest extends UnitTestCase {
   }
 
   public function testGetUserInfo() {
-    $ghc = GitHubCardsGitHubService::create($this->container);
+    $ghc = GitHubCardsInfoService::create($this->container);
 
     $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfo($this->testUserName));
     $this->assertFalse($ghc->getUserInfo(''));
@@ -88,7 +88,7 @@ class GitHubCardsGitHubServiceTest extends UnitTestCase {
   }
 
   public function testGetRepositoryInfo() {
-    $ghc = GitHubCardsGitHubService::create($this->container);
+    $ghc = GitHubCardsInfoService::create($this->container);
 
     $this->assertEquals($this->getRepoInfo($this->testUserName, $this->testRepoName), $ghc->getRepositoryInfo($this->testUserName, $this->testRepoName));
     $this->assertFalse($ghc->getRepositoryInfo('', ''));
@@ -109,7 +109,7 @@ class GitHubCardsGitHubServiceTest extends UnitTestCase {
   }
 
   public function testGetClient() {
-    $ghc = GitHubCardsGitHubService::create($this->container);
+    $ghc = GitHubCardsInfoService::create($this->container);
     $this->assertInstanceOf(Client::class, $ghc->getClient());
   }
 

@@ -3,9 +3,9 @@
 namespace Drupal\github_cards\Service;
 
 /**
- * Interface GitHubCardsGitHubServiceInterface.
+ * Interface GitHubCardsInfoServiceInterface.
  */
-interface GitHubCardsGitHubServiceInterface {
+interface GitHubCardsInfoServiceInterface {
 
   /**
    * A GitHub Client object.
