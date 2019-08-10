@@ -110,6 +110,12 @@ class GitHubCardsGitHubService  implements ContainerInjectionInterface, GitHubCa
    */
   public function parseResourceUrl($url) {
 
+    // Some pre-checks to make sure we have something resembling a full URL
+    // because parse_url(1234) will return 1234 as the path.
+    if (!\filter_var($url, \FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
+      return FALSE;
+    }
+
     // We don't use the Drupal UrlHelper class because it groups the domain
     // with the the path when all we actually want is the path.
     $path = parse_url($url, \PHP_URL_PATH);
@@ -117,12 +123,19 @@ class GitHubCardsGitHubService  implements ContainerInjectionInterface, GitHubCa
     $path = explode('/', $path);
 
     $parts = [
-      'type' => 'user',
+      'type' => 'invalid',
       'user' => $path[0] ?? NULL,
       'repository' => $path[1] ?? NULL,
     ];
 
-    return !empty($parts['user']) ? $parts : FALSE;
+    if (!empty($parts['user']) && empty($parts['repository'])) {
+      $parts['type'] = 'user';
+    }
+    elseif (!empty($parts['user']) && !empty($parts['repository'])) {
+      $parts['type'] = 'repository';
+    }
+
+    return $parts['type'] === 'invalid' ? FALSE : $parts;
   }
 
 }
