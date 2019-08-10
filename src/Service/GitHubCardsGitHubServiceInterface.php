@@ -39,4 +39,15 @@ interface GitHubCardsGitHubServiceInterface {
    */
   public function getRepositoryInfo($userName, $repoName);
 
+  /**
+   * Parse a resource URL into useful information.
+   *
+   * @param string $url
+   *   The URL to parse for information.
+   *
+   * @return array|bool
+   *   An array of resource information, or FALSE on a bad resource URL.
+   */
+  public function parseResourceUrl($url);
+
 }
