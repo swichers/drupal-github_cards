@@ -1,0 +1,14 @@
+services:
+  logger.channel.github_cards:
+    parent: logger.channel_base
+    arguments: ['github_cards']
+  github_cards.client.factory:
+    class: Drupal\github_cards\Service\GitHubCardsClientFactory
+    arguments: []
+    public: false
+  github_cards.client:
+    class: Github\Client
+    factory: ['@github_cards.client.factory', 'createGitHubClient']
+  github_cards.github:
+    class: Drupal\github_cards\Service\GitHubCardsGitHubService
+    arguments: ['@cache.default', '@entity_type.manager','@logger.channel.github_cards', '@github_cards.client']

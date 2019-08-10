@@ -30,6 +30,7 @@ class GitHubCardEntityListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
+
     /* @var \Drupal\github_cards\Entity\GitHubCardEntity $entity */
     $row['id'] = $entity->id();
     $row['name'] = $entity->toLink(NULL, 'edit-form');
