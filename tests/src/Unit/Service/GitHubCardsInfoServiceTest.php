@@ -69,11 +69,12 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     }
   }
 
-  public function testGetUserInfo() {
+  public function testGetUserInfoByUrl() {
     $ghc = GitHubCardsInfoService::create($this->container);
 
-    $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfo($this->testUserName));
-    $this->assertFalse($ghc->getUserInfo(''));
+    $url = sprintf('http://example.com/%s', $this->testUserName);
+    $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfoByUrl($url));
+    $this->assertFalse($ghc->getUserInfoByUrl(''));
   }
 
   protected function getUserInfo($userName) {
@@ -85,6 +86,21 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
       'followers' => 7,
       'following' => 3,
     ];
+  }
+
+  public function testGetRepoInfoByUrl() {
+    $ghc = GitHubCardsInfoService::create($this->container);
+
+    $url = sprintf('http://example.com/%s/%s', $this->testUserName, $this->testRepoName);
+    $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfoByUrl($url));
+    $this->assertFalse($ghc->getUserInfoByUrl(''));
+  }
+
+  public function testGetUserInfo() {
+    $ghc = GitHubCardsInfoService::create($this->container);
+
+    $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfo($this->testUserName));
+    $this->assertFalse($ghc->getUserInfo(''));
   }
 
   public function testGetRepositoryInfo() {

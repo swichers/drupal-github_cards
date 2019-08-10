@@ -132,4 +132,40 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
     return $parts['type'] === 'invalid' ? FALSE : $parts;
   }
 
+  /**
+   * Get Repository information by a Resource URL.
+   *
+   * @param string $url
+   *   The Resource URL.
+   *
+   * @return array|false
+   *   An array of Repository information or FALSE on failure.
+   */
+  public function getRepositoryInfoByUrl($url) {
+    $parts = $this->parseResourceUrl($url);
+    if (empty($parts)) {
+      return FALSE;
+    }
+
+    return $this->getRepositoryInfo($parts['user'], $parts['repository']);
+  }
+
+  /**
+   * Get User information by a Resource URL.
+   *
+   * @param string $url
+   *   The Resource URL.
+   *
+   * @return array|false
+   *   An array of User information or FALSE on failure.
+   */
+  public function getUserInfoByUrl($url) {
+    $parts = $this->parseResourceUrl($url);
+    if (empty($parts)) {
+      return FALSE;
+    }
+
+    return $this->getUserInfo($parts['user']);
+  }
+
 }
