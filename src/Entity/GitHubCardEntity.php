@@ -70,6 +70,16 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
   /**
    * {@inheritdoc}
    */
+  public function preSave(EntityStorageInterface $storage) {
+    $resource_info = $this->getGitHubCardsInfoService()->parseResourceUrl($this->getResource());
+    $this->setResourceType($resource_info['type'] ?? 'invalid');
+
+    parent::preSave($storage);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getName() {
     return $this->get('name')->value;
   }
@@ -172,11 +182,6 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
       ->setRevisionable(TRUE)
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'author',
-        'weight' => 0,
-      ])
       ->setDisplayOptions('form', [
         'type' => 'entity_reference_autocomplete',
         'weight' => -1,
@@ -186,9 +191,7 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
           'autocomplete_type' => 'tags',
           'placeholder' => '',
         ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ]);
 
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Name'))
@@ -198,20 +201,14 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
         'text_processing' => 0,
       ])
       ->setDefaultValue('')
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -4,
-      ])
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => -10,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
       ->setRequired(TRUE);
 
-    $fields['status']->setDescription(t('A boolean indicating whether the GitHub Card is published.'))
+    $fields[$entity_type->getKey('published')]
+      ->setDescription(t('A boolean indicating whether the GitHub Card is published.'))
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'weight' => 0,
@@ -228,48 +225,42 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
     $fields['resource_type'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('Resource Type'))
       ->setDescription(t('The type of GitHub resource being shown.'))
-      ->setDefaultValue('user')
+      ->setDefaultValue('invalid')
       ->setSettings([
         'allowed_values' => [
+          'invalid' => t('Invalid'),
           'user' => t('User'),
           'repo' => t('Repository'),
         ],
       ])
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -2,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'options_select',
-        'weight' => -9,
-      ])
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE)
       ->setRequired(TRUE);
 
     $fields['resource'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Resource'))
       ->setDescription(t('The GitHub resource URI.'))
+      ->addConstraint('UniqueField')
+      ->addConstraint('NotBlank')
       ->setSettings([
         'max_length' => 255,
         'text_processing' => 0,
       ])
       ->setDefaultValue('')
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -1,
-      ])
       ->setDisplayOptions('form', [
         'type' => 'uri',
         'weight' => -8,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
       ->setRequired(TRUE);
 
     return $fields;
+  }
+
+  /**
+   * Get an instance of the GitHub Cards Info Service.
+   *
+   * @return \Drupal\github_cards\Service\GitHubCardsInfoServiceInterface
+   */
+  protected function getGitHubCardsInfoService() {
+    return \Drupal::service('github_cards.github_info');
   }
 
 }

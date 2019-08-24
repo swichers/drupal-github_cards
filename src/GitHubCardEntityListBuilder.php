@@ -34,17 +34,23 @@ class GitHubCardEntityListBuilder extends EntityListBuilder {
     /* @var \Drupal\github_cards\Entity\GitHubCardEntity $entity */
     $row['id'] = $entity->id();
     $row['name'] = $entity->toLink(NULL, 'edit-form');
-    $row['resource_type'] = $entity->getResourceType() == 'user' ?
-      $this->t('User') :
-      $this->t('Repository');
 
-    $row['resource'] = [
-      'data' => [
-        '#type' => 'link',
-        '#title' => $entity->getResource(),
-        '#url' => Url::fromUri($entity->getResource()),
-      ],
-    ];
+    $allowed_values = $entity->getFieldDefinition('resource_type')->getSetting('allowed_values');
+    $row['resource_type'] = $allowed_values[$entity->getResourceType()] ?? $this->t('Invalid');
+
+    try {
+      $row['resource'] = [
+        'data' => [
+          '#type' => 'link',
+          '#title' => $entity->getResource(),
+          '#url' => Url::fromUri($entity->getResource()),
+        ],
+      ];
+    }
+    catch (\Exception $x) {
+      $row['resource'] = $entity->getResource();
+    }
+
     $row['owner'] = $entity->getOwner()->toLink();
     $row['status'] = $entity->isPublished() ?
       $this->t('Active') :
