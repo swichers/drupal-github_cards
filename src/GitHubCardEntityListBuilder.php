@@ -33,7 +33,7 @@ class GitHubCardEntityListBuilder extends EntityListBuilder {
 
     /* @var \Drupal\github_cards\Entity\GitHubCardEntity $entity */
     $row['id'] = $entity->id();
-    $row['name'] = $entity->toLink(NULL, 'edit-form');
+    $row['name'] = $entity->toLink(NULL, 'canonical');
 
     $allowed_values = $entity->getFieldDefinition('resource_type')->getSetting('allowed_values');
     $row['resource_type'] = $allowed_values[$entity->getResourceType()] ?? $this->t('Invalid');
