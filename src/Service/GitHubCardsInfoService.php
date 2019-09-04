@@ -2,6 +2,7 @@
 
 namespace Drupal\github_cards\Service;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -33,6 +34,13 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
    */
   protected $loggerChannel;
 
+  /*
+   * Drupal Time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
   /**
    * A GitHub Client instance.
    *
@@ -46,12 +54,14 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_default
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    * @param \Drupal\Core\Logger\LoggerChannelInterface|object $logger_channel
+   * @param \Drupal\Component\Datetime\TimeInterface|object $time
    * @param \Github\Client $github_client
    */
-  public function __construct(CacheBackendInterface $cache_default, EntityTypeManagerInterface $entity_type_manager, LoggerChannelInterface $logger_channel, Client $github_client) {
+  public function __construct(CacheBackendInterface $cache_default, EntityTypeManagerInterface $entity_type_manager, LoggerChannelInterface $logger_channel, TimeInterface $time, Client $github_client) {
     $this->cacheDefault = $cache_default;
     $this->entityTypeManager = $entity_type_manager;
     $this->loggerChannel = $logger_channel;
+    $this->time = $time;
     $this->githubClient = $github_client;
   }
 
@@ -60,6 +70,7 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
       $container->get('cache.default'),
       $container->get('entity_type.manager'),
       $container->get('logger.channel.github_cards'),
+      $container->get('datetime.time'),
       $container->get('github_cards.client')
     );
   }
@@ -72,31 +83,59 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
   }
 
   /**
-   * {@inheritdoc}}
+   * Provides a cached request wrapper for getting GitHub information.
+   *
+   * @param string $userName
+   *   The user to get information about or that owns the repository provided.
+   * @param string $repoName
+   *   The repository to get information about.
+   *
+   * @return array|false
+   *   The information about the user or repository. FALSE on failure.
    */
-  public function getUserInfo($userName) {
+  protected function getRemoteInfo($userName, $repoName = NULL) {
+    $cid = implode(':', array_filter(['github_cards', $userName, $repoName]));
+    $cached = $this->cacheDefault->get($cid);
+    if ($cached) {
+      return $cached->data;
+    }
+
     try {
-      return $this->githubClient->users()->show($userName);
+      if (is_null($repoName)) {
+        $data = $this->githubClient->users()->show($userName);
+      }
+      else {
+        $data = $this->githubClient->repository()->show($userName, $repoName);
+      }
     }
     catch (\Exception $x) {
       $this->loggerChannel->error($x->getMessage());
+      $data = NULL;
     }
 
-    return FALSE;
+    // Expire in 1 hour from now.
+    $expires = $this->time->getRequestTime() + 3600;
+
+    $tags = ['github_cards'];
+    $tags[] = empty($repoName) ? 'github_card_user' : 'github_card_repo';
+
+    $this->cacheDefault->set($cid, $data, $expires, $tags);
+
+    return $data ?? FALSE;
+  }
+
+  /**
+   * {@inheritdoc}}
+   */
+  public function getUserInfo($userName) {
+    return $this->getRemoteInfo($userName);
   }
 
   /**
    * {@inheritdoc}}
    */
   public function getRepositoryInfo($userName, $repoName) {
-    try {
-      return $this->githubClient->repository()->show($userName, $repoName);
-    }
-    catch (\Exception $x) {
-      $this->loggerChannel->error($x->getMessage());
-    }
-
-    return FALSE;
+    return $this->getRemoteInfo($userName, $repoName ?: FALSE);
   }
 
   /**

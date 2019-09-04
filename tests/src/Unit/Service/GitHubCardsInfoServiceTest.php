@@ -3,6 +3,7 @@
 namespace Drupal\Tests\github_cards\Unit\Service;
 
 use Drupal;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -101,6 +102,7 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
 
     $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfo($this->testUserName));
     $this->assertFalse($ghc->getUserInfo(''));
+    $this->assertFalse($ghc->getUserInfo(FALSE));
   }
 
   public function testGetRepositoryInfo() {
@@ -111,6 +113,7 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     $this->assertFalse($ghc->getRepositoryInfo('', NULL));
     $this->assertFalse($ghc->getRepositoryInfo($this->testUserName, NULL));
     $this->assertFalse($ghc->getRepositoryInfo($this->testUserName, ''));
+    $this->assertFalse($ghc->getRepositoryInfo($this->testUserName, FALSE));
   }
 
   protected function getRepoInfo($userName, $repoName) {
@@ -150,10 +153,15 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
       ->disableOriginalConstructor()
       ->getMock();
 
+    $time = $this->getMockBuilder(TimeInterface::class)
+      ->disableOriginalConstructor()
+      ->getMock();
+
     $this->container = new ContainerBuilder();
     $this->container->set('cache.default', $cache_default_bin);
     $this->container->set('entity_type.manager', $entity_type_manager);
     $this->container->set('logger.channel.github_cards', $logger_channel);
+    $this->container->set('datetime.time', $time);
     $this->container->set('github_cards.client', $this->getMockedGitHubClient($this->testUserName, $this->testRepoName));
     Drupal::setContainer($this->container);
   }
