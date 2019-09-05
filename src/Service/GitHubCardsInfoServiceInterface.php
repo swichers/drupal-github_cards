@@ -50,4 +50,37 @@ interface GitHubCardsInfoServiceInterface {
    */
   public function parseResourceUrl($url);
 
+  /**
+   * Get User information by a Resource URL.
+   *
+   * @param string $url
+   *   The Resource URL.
+   *
+   * @return array|false
+   *   An array of User information or FALSE on failure.
+   */
+  public function getUserInfoByUrl($url);
+
+  /**
+   * Get Repository information by a Resource URL.
+   *
+   * @param string $url
+   *   The Resource URL.
+   *
+   * @return array|false
+   *   An array of Repository information or FALSE on failure.
+   */
+  public function getRepositoryInfoByUrl($url);
+
+  /**
+   * Gets resource information by the given URL.
+   *
+   * @param string $url
+   *   The Resource URL.
+   *
+   * @return array|false
+   *   An array of resource information or FALSE on failure.
+   */
+  public function getInfoByUrl($url);
+
 }

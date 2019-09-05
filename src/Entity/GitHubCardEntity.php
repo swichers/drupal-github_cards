@@ -18,6 +18,13 @@ use Drupal\user\UserInterface;
  * @ContentEntityType(
  *   id = "github_card",
  *   label = @Translation("GitHub Card"),
+ *   label_collection = @Translation("GitHub Cards"),
+ *   label_singular = @Translation("GitHub card"),
+ *   label_plural = @Translation("GitHub cards"),
+ *   label_count = @PluralTranslation(
+ *     singular = "@count GitHub card",
+ *     plural = "@count GitHub cards"
+ *   ),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\github_cards\GitHubCardEntityListBuilder",
@@ -71,7 +78,7 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
-    $resource_info = $this->getGitHubCardsInfoService()->parseResourceUrl($this->getResource());
+    $resource_info = $this->getResourceInfo();
     $this->setResourceType($resource_info['type'] ?? 'invalid');
 
     parent::preSave($storage);
@@ -170,6 +177,44 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
   /**
    * {@inheritdoc}
    */
+  public function isRepositoryResource() {
+    return $this->getResourceType() === 'repository';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isUserResource() {
+    return $this->getResourceType() === 'user';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getResourceUser() {
+    $resource_info = $this->getResourceInfo();
+    return $resource_info['user'] ?? FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getResourceRepository() {
+    $resource_info = $this->getResourceInfo();
+    return $resource_info['repository'] ?? FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fetchResourceData() {
+    $info_service = $this->getGitHubCardsInfoService();
+    return $info_service->getInfoByUrl($this->getResource());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
@@ -261,6 +306,17 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
    */
   protected function getGitHubCardsInfoService() {
     return \Drupal::service('github_cards.github_info');
+  }
+
+  /**
+   * Get the parsed resource information.
+   *
+   * @return array|bool
+   *   An array of resource information or FALSE on failure.
+   */
+  protected function getResourceInfo() {
+    return $this->getGitHubCardsInfoService()
+      ->parseResourceUrl($this->getResource());
   }
 
 }

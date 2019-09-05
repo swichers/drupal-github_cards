@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a GitHub Card.
+ *
+ * Available variables:
+ * - github_card: The GitHub Card entity with limited access to object properties and methods.
+ * - github_card_info: The GitHub resource information associated with the GitHub Card. Some attributes include:
+ *   id: The resource ID.
+ *   node_id: The global node ID for API usage.
+ *   name: The name of the GitHub resource.
+ *   created_at: When the resource was created.
+ *   updated_at: When the resource was updated.
+ *   url: The API url for the resource.
+ *   html_url: The Web url for the resource.
+ * - label: (optional) The title of the GitHub Card.
+ * - url: Direct URL of the current GitHub Card.
+ * - attributes: HTML attributes for the containing element.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ *
+ * @see template_preprocess_github_card()
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label  %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  <div{{ content_attributes }}>
+    <a href="{{ github_card_info.html_url }}" rel="external">{{ github_card_info.name }}</a>
+  </div>
+</article>

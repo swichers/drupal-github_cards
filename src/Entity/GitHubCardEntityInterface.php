@@ -132,4 +132,44 @@ interface GitHubCardEntityInterface extends ContentEntityInterface, EntityChange
    */
   public function setResource($resource);
 
+  /**
+   * Determine if this entity is a GitHub repository.
+   *
+   * @return bool
+   *   TRUE if this entity represents a repository.
+   */
+  public function isRepositoryResource();
+
+  /**
+   * Determine if this entity is a GitHub user.
+   *
+   * @return bool
+   *   TRUE if this entity represents a user.
+   */
+  public function isUserResource();
+
+  /**
+   * Get the username for the resource.
+   *
+   * @return string|false
+   *   The username or FALSE on failure.
+   */
+  public function getResourceUser();
+
+  /**
+   * Get the repository name for the resource.
+   *
+   * @return string|false
+   *   The repository name or FALSE on failure.
+   */
+  public function getResourceRepository();
+
+  /**
+   * Fetch the remote resource data.
+   *
+   * @return array|false
+   *   The remote resource data.
+   */
+  public function fetchResourceData();
+
 }

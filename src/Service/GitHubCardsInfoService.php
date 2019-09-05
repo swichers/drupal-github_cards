@@ -7,6 +7,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\github_cards\Entity\GitHubCardEntityInterface;
 use Github\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -172,17 +173,11 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
   }
 
   /**
-   * Get Repository information by a Resource URL.
-   *
-   * @param string $url
-   *   The Resource URL.
-   *
-   * @return array|false
-   *   An array of Repository information or FALSE on failure.
+   * {@inheritdoc}
    */
   public function getRepositoryInfoByUrl($url) {
     $parts = $this->parseResourceUrl($url);
-    if (empty($parts)) {
+    if (empty($parts) || $parts['type'] !== 'repository') {
       return FALSE;
     }
 
@@ -190,13 +185,7 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
   }
 
   /**
-   * Get User information by a Resource URL.
-   *
-   * @param string $url
-   *   The Resource URL.
-   *
-   * @return array|false
-   *   An array of User information or FALSE on failure.
+   * {@inheritdoc}
    */
   public function getUserInfoByUrl($url) {
     $parts = $this->parseResourceUrl($url);
@@ -204,7 +193,19 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
       return FALSE;
     }
 
-    return $this->getUserInfo($parts['user']);
+    return $this->getRemoteInfo($parts['user'], NULL);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getInfoByUrl($url) {
+    $parts = $this->parseResourceUrl($url);
+    if (empty($parts)) {
+      return FALSE;
+    }
+
+    return $this->getRemoteInfo($parts['user'], $parts['repository']);
   }
 
 }

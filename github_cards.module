@@ -26,10 +26,54 @@ function github_cards_help($route_name, RouteMatchInterface $route_match) {
 /**
  * Implements hook_theme().
  */
-function github_cards_theme() {
+function github_cards_theme($existing, $type, $theme, $path) {
   $theme = [];
 
+  $theme['github_card'] = [
+    'render element' => 'elements',
+    'path' => $path . '/templates',
+    'template' => 'github-card',
+  ];
+
   return $theme;
+}
+
+/**
+ * Prepares variables for GitHub Card templates.
+ *
+ * Default template: github-card.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An array of elements to display in view mode.
+ *   - view_mode: View mode; e.g., 'full', 'teaser', etc.
+ *
+ * @see hook_entity_type_build()
+ * @see \Drupal\Core\Field\BaseFieldDefinition::setDisplayConfigurable()
+ */
+function github_cards_preprocess_github_card(array &$variables) {
+
+  /** @var \Drupal\github_cards\Service\GitHubCardsInfoService $info_service */
+  $info_service = \Drupal::service('github_cards.github_info');
+
+  /** @var \Drupal\github_cards\Entity\GitHubCardEntityInterface $card */
+  $card = $variables['elements']['#github_card'];
+  $card_info = $card->fetchResourceData();
+  $variables['github_card'] = $card;
+  $variables['github_card_info'] = $card_info;
+
+  $variables['label'] = $card->label();
+
+  $variables['url'] = !$card->isNew() ? $card->toUrl('canonical')->toString() : NULL;
+
+  $variables['attributes']['data-uuid'] = $card->uuid();
+  $variables['attributes']['data-github-id'] = $card_info['id'];
+  $variables['attributes']['data-github-node-id'] = $card_info['node_id'];
+  $variables['attributes']['data-github-name'] = $card_info['name'];
+  $variables['attributes']['data-github-url'] = $card_info['html_url'];
+
+  // Add article ARIA role.
+  $variables['attributes']['role'] = 'article';
 }
 
 /**
@@ -37,12 +81,13 @@ function github_cards_theme() {
  */
 function github_cards_theme_suggestions_github_card(array $variables) {
   $suggestions = [];
+  /** @var \Drupal\github_cards\Entity\GitHubCardEntityInterface $entity */
   $entity = $variables['elements']['#github_card'];
   $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
 
   $suggestions[] = 'github_card__' . $sanitized_view_mode;
-  $suggestions[] = 'github_card__' . $entity->bundle();
-  $suggestions[] = 'github_card__' . $entity->bundle() . '__' . $sanitized_view_mode;
+  $suggestions[] = 'github_card__' . $entity->getResourceType();
+  $suggestions[] = 'github_card__' . $entity->getResourceType() . '__' . $sanitized_view_mode;
   $suggestions[] = 'github_card__' . $entity->id();
   $suggestions[] = 'github_card__' . $entity->id() . '__' . $sanitized_view_mode;
   return $suggestions;
