@@ -106,7 +106,7 @@ interface GitHubCardEntityInterface extends ContentEntityInterface, EntityChange
    * Set the GitHub Card resource type.
    *
    * @param string $resourceType
-   *   The resource type. One of 'user' or 'repo'.
+   *   The resource type. One of 'user' or 'repository'.
    *
    * @return \Drupal\github_cards\Entity\GitHubCardEntityInterface
    *   The called GitHub Card entity.

@@ -230,7 +230,7 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
         'allowed_values' => [
           'invalid' => t('Invalid'),
           'user' => t('User'),
-          'repo' => t('Repository'),
+          'repository' => t('Repository'),
         ],
       ])
       ->setRequired(TRUE);
