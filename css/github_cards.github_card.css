@@ -1,0 +1,109 @@
+.github-card {
+  background-color: #fff;
+  color: #7d7d7d;
+  border: thin solid #e4e4e4;
+  width: 100%;
+  min-width: 250px;
+  border-radius: .5em;
+  padding: .5em;
+  display: inline-block;
+  box-shadow: 2px 3px rgba(228, 228, 228, .7);
+}
+
+.github-card a.match-coloring {
+  color: #7d7d7d;
+}
+
+.github-card header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  margin-bottom: .5em;
+}
+
+.github-card header .avatar {
+  flex-shrink: 0;
+  margin-right: .5em;
+}
+
+.github-card header .avatar img {
+  border-radius: .5em;
+}
+
+.github-card header .name {
+  color: #000;
+  font-weight: bold;
+}
+
+.github-card header .language {
+  font-size: x-small;
+}
+
+.github-card header .handle {
+  font-size: smaller;
+}
+
+.github-card header .button {
+  margin: 0 0 0 auto;
+  font-size: small;
+  padding: .5em;
+  font-weight: normal;
+}
+
+.github-card ul.status {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  border-top: thin solid #e4e4e4;
+  border-bottom: thin solid #e4e4e4;
+}
+
+.github-card ul.status li {
+  padding: .5em;
+  border-right: thin solid #e4e4e4;
+  text-transform: uppercase;
+  flex-grow: 1;
+}
+
+.github-card ul.status li:last-of-type {
+  border-right: none;
+}
+
+.github-card ul.status li a {
+  flex-grow: 1;
+}
+
+.github-card ul.status li .label {
+  font-size: smaller;
+}
+
+.github-card ul.status li .count {
+  font-weight: bold;
+  display: block;
+  color: #000;
+}
+
+.github-card footer p.description {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  padding-top: .5em;
+}
+
+ul.status.small {
+  border: none;
+  justify-content: unset;
+}
+
+ul.status.small li {
+  border: none;
+  flex-grow: unset;
+}
+
+ul.status.small li .count {
+  display: inline;
+  margin-right: .25em;
+}

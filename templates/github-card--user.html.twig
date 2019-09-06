@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * Custom theme implementation for a GitHub user card.
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('github_cards/github-cards') }}
+{% spaceless %}
+  <article{{ attributes.addClass(['github-card', 'user-card']) }}>
+    <header>
+      <a class="avatar" href="{{ github_card_info.html_url }}">
+        <img src="{{ github_card_info.avatar_url }}&amp;s=48" alt="{{ 'User avatar'|t }}"/>
+      </a>
+
+      <div>
+        <a class="name" href="{{ github_card_info.html_url }}">{{ github_card_info.name }}</a>
+
+        <div class="handle"><a href="{{ github_card_info.html_url }}">@{{ github_card_info.login }}</a></div>
+      </div>
+
+      <a class="button" href="{{ github_card_info.html_url }}">{{ 'Follow'|t }}</a>
+    </header>
+
+    {% if github_card_info.public_repos or github_card_info.public_gists or github_card_info.followers %}
+      <section>
+        <ul class="status">
+          {% if github_card_info.public_repos %}
+            <li>
+              <a href="{{ github_card_info.html_url }}?tab=repositories" class="match-coloring">
+                <span class="count">{{ github_card_info.public_repos }}</span>
+                <span class="label">{{ 'Repos'|t }}</span>
+              </a>
+            </li>
+          {% endif %}
+          {% if github_card_info.public_gists %}
+            <li>
+              <a href="https://gists.github.com/{{ github_card_info.login }}" class="match-coloring">
+                <span class="count">{{ github_card_info.public_gists }}</span>
+                <span class="label">{{ 'Gists'|t }}</span>
+              </a>
+            </li>
+          {% endif %}
+          {% if github_card_info.followers %}
+            <li>
+              <a href="{{ github_card_info.html_url }}/followers" class="match-coloring">
+                <span class="count">{{ github_card_info.followers }}</span>
+                <span class="label">{{ 'Followers'|t }}</span>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </section>
+    {% endif %}
+
+    {% if github_card_info.bio is not empty %}
+      <footer>
+        <p class="description">{{ github_card_info.bio }}</p>
+      </footer>
+    {% endif %}
+  </article>
+{% endspaceless %}

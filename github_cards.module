@@ -35,6 +35,18 @@ function github_cards_theme($existing, $type, $theme, $path) {
     'template' => 'github-card',
   ];
 
+  $theme['github_card__user'] = [
+    'path' => $path . '/templates',
+    'template' => 'github-card--user',
+    'base hook' => 'github_card',
+  ];
+
+  $theme['github_card__repository'] = [
+    'path' => $path . '/templates',
+    'template' => 'github-card--repository',
+    'base hook' => 'github_card',
+  ];
+
   return $theme;
 }
 
@@ -67,6 +79,7 @@ function github_cards_preprocess_github_card(array &$variables) {
   $variables['url'] = !$card->isNew() ? $card->toUrl('canonical')->toString() : NULL;
 
   $variables['attributes']['data-uuid'] = $card->uuid();
+  $variables['attributes']['data-github-resource-type'] = $card->getResourceType();
   $variables['attributes']['data-github-id'] = $card_info['id'];
   $variables['attributes']['data-github-node-id'] = $card_info['node_id'];
   $variables['attributes']['data-github-name'] = $card_info['name'];

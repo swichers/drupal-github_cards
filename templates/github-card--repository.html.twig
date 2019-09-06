@@ -1,0 +1,61 @@
+{#
+/**
+ * @file
+ * Custom theme implementation for a GitHub repository card.
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('github_cards/github-cards') }}
+{% spaceless %}
+  <article{{ attributes.addClass(['github-card', 'repository-card']) }}>
+    <header>
+      <a class="avatar" href="{{ github_card_info.owner.html_url }}">
+        <img src="{{ github_card_info.owner.avatar_url }}&amp;s=48" alt="{{ 'User avatar'|t }}"/>
+      </a>
+
+      <div>
+        <span>
+          <a class="name" href="{{ github_card_info.html_url }}">{{ github_card_info.name }}</a>
+          <sup class="language">{{ github_card_info.language }}</sup>
+        </span>
+        <div class="handle">{{ 'Created by'|t }}
+          <a href="{{ github_card_info.owner.html_url }}">{{ github_card_info.owner.login }}</a>
+        </div>
+      </div>
+
+      <a class="button" href="{{ github_card_info.html_url }}">{{ 'Star'|t }}</a>
+    </header>
+
+    {% if github_card_info.description is not empty %}
+      <section>
+        <p class="description">{{ github_card_info.description }}</p>
+      </section>
+    {% endif %}
+
+    {% if github_card_info.forks_count or github_card_info.stargazers_count or github_card_info.watchers_count %}
+      <footer>
+          <ul class="status small">
+            {% if github_card_info.forks_count %}
+              <li>
+                <span class="count">{{ github_card_info.forks_count }}</span>
+                <span class="label">{{ 'Forks'|t }}</span>
+              </li>
+            {% endif %}
+            {% if github_card_info.stargazers_count %}
+              <li>
+                <span class="count">{{ github_card_info.stargazers_count }}</span>
+                <span class="label">{{ 'Stars'|t }}</span>
+              </li>
+            {% endif %}
+            {% if github_card_info.watchers_count %}
+              <li>
+                <span class="count">{{ github_card_info.watchers_count }}</span>
+                <span class="label">{{ 'Watchers'|t }}</span>
+              </li>
+            {% endif %}
+          </ul>
+      </footer>
+    {% endif %}
+  </article>
+{% endspaceless %}
