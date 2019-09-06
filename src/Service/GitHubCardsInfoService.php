@@ -117,12 +117,9 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
     }
 
     try {
-      if (is_null($repoName)) {
-        $data = $this->githubClient->users()->show($userName);
-      }
-      else {
-        $data = $this->githubClient->repository()->show($userName, $repoName);
-      }
+      $data = is_null($repoName) ?
+        $this->githubClient->users()->show($userName) :
+        $this->githubClient->repository()->show($userName, $repoName);
     }
     catch (\Exception $x) {
       $this->loggerChannel->error($x->getMessage());

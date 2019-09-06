@@ -4,10 +4,10 @@
   border: thin solid #e4e4e4;
   width: 100%;
   min-width: 250px;
-  border-radius: .5em;
-  padding: .5em;
+  border-radius: 0.5em;
+  padding: 0.5em;
   display: inline-block;
-  box-shadow: 2px 3px rgba(228, 228, 228, .7);
+  box-shadow: 2px 3px rgba(228, 228, 228, 0.7);
 }
 
 .github-card a.match-coloring {
@@ -18,16 +18,16 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: flex-start;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .github-card header .avatar {
   flex-shrink: 0;
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 
 .github-card header .avatar img {
-  border-radius: .5em;
+  border-radius: 0.5em;
 }
 
 .github-card header .name {
@@ -46,7 +46,7 @@
 .github-card header .button {
   margin: 0 0 0 auto;
   font-size: small;
-  padding: .5em;
+  padding: 0.5em;
   font-weight: normal;
 }
 
@@ -62,8 +62,23 @@
   border-bottom: thin solid #e4e4e4;
 }
 
+ul.status.small {
+  border: none;
+  justify-content: unset;
+}
+
+ul.status.small li {
+  border: none;
+  flex-grow: unset;
+}
+
+ul.status.small li .count {
+  display: inline;
+  margin-right: 0.25em;
+}
+
 .github-card ul.status li {
-  padding: .5em;
+  padding: 0.5em;
   border-right: thin solid #e4e4e4;
   text-transform: uppercase;
   flex-grow: 1;
@@ -90,20 +105,5 @@
 .github-card footer p.description {
   margin-bottom: 0;
   padding-bottom: 0;
-  padding-top: .5em;
-}
-
-ul.status.small {
-  border: none;
-  justify-content: unset;
-}
-
-ul.status.small li {
-  border: none;
-  flex-grow: unset;
-}
-
-ul.status.small li .count {
-  display: inline;
-  margin-right: .25em;
+  padding-top: 0.5em;
 }
