@@ -89,14 +89,34 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
   }
 
   /**
+   * Validate we can get resource information from a URL.
+   */
+  public function testGetInfoByUrl() {
+    $ghc = GitHubCardsInfoService::create($this->container);
+
+    $this->assertFalse($ghc->getInfoByUrl(''));
+
+    $url = sprintf('http://example.com/%s', $this->testUserName);
+    $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getInfoByUrl($url));
+
+    $url = sprintf('http://example.com/%s/%s', $this->testUserName, $this->testRepoName);
+    $this->assertEquals($this->getRepoInfo($this->testUserName, $this->testRepoName), $ghc->getInfoByUrl($url));
+  }
+
+  /**
    * Validate we can get user information by URL.
    */
   public function testGetUserInfoByUrl() {
     $ghc = GitHubCardsInfoService::create($this->container);
 
+    $this->assertFalse($ghc->getUserInfoByUrl(''));
+
     $url = sprintf('http://example.com/%s', $this->testUserName);
     $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfoByUrl($url));
-    $this->assertFalse($ghc->getUserInfoByUrl(''));
+
+    // Make sure that even with a repo URL we are getting the proper user.
+    $url = sprintf('http://example.com/%s/%s', $this->testUserName, $this->testRepoName);
+    $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfoByUrl($url));
   }
 
   /**
@@ -105,9 +125,10 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
   public function testGetRepoInfoByUrl() {
     $ghc = GitHubCardsInfoService::create($this->container);
 
+    $this->assertFalse($ghc->getRepositoryInfoByUrl(''));
+
     $url = sprintf('http://example.com/%s/%s', $this->testUserName, $this->testRepoName);
-    $this->assertEquals($this->getUserInfo($this->testUserName), $ghc->getUserInfoByUrl($url));
-    $this->assertFalse($ghc->getUserInfoByUrl(''));
+    $this->assertEquals($this->getRepoInfo($this->testUserName, $this->testRepoName), $ghc->getRepositoryInfoByUrl($url));
   }
 
   /**
