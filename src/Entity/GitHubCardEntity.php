@@ -34,7 +34,7 @@ use Drupal\user\UserInterface;
  *       "delete" = "Drupal\github_cards\Form\GitHubCardEntityDeleteForm"
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\github_cards\GitHubCardEntityHtmlRouteProvider",
+ *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *     "access" = "Drupal\github_cards\GitHubCardEntityAccessControlHandler",
  *   },
