@@ -78,6 +78,7 @@ class GitHubCardBlock extends BlockBase implements BlockPluginInterface, Contain
       '#description' => $this->t('The GitHub Card to use for information.'),
       '#default_value' => $card,
       '#target_type' => 'github_card',
+      '#required' => TRUE,
     ];
 
     return $form;
