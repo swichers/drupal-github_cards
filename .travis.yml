@@ -20,7 +20,6 @@ before_install:
   - composer self-update
   - composer global require hirak/prestissimo
   - composer global require drupal/coder dealerdirect/phpcodesniffer-composer-installer
-  - phpenv config-rm xdebug.ini
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - phpenv rehash
 
@@ -28,7 +27,9 @@ install:
   # Download and install Drupal Composer.
   - cd .. && composer create-project drupal-composer/drupal-project:8.x-dev drupal --stability dev --no-interaction
   - cd drupal
+  # Add in module dependencies.
   - composer require 'knplabs/github-api:^2.12@dev' 'php-http/guzzle6-adapter:^1.1'
+  - composer require --dev 'codacy/coverage:dev-master'
   - composer install
 
   # Create symlink to add module to drupal site.
@@ -36,9 +37,9 @@ install:
 
 script:
   - cd web && php ../vendor/bin/phpunit -c core/phpunit.xml.dist modules/$MODULE_NAME
+  - php ../vendor/bin/phpunit -c core/phpunit.xml.dist --coverage-clover $TRAVIS_BUILD_DIR/../build/logs/clover.xml modules/$MODULE_NAME
   - cd $TRAVIS_BUILD_DIR && ../drupal/vendor/bin/phpcs
-#  - php ../vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
 
 
 after_script:
-#  - php vendor/bin/codacycoverage clover ./build/logs/clover.xml
+  - php ../drupal/vendor/bin/codacycoverage clover ../build/logs/clover.xml
