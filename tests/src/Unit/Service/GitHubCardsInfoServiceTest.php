@@ -14,6 +14,11 @@ use Github\Api\Repo;
 use Github\Api\User;
 use Github\Client;
 
+/**
+ * Class GitHubCardsInfoServiceTest.
+ *
+ * @package Drupal\Tests\github_cards\Unit\Service
+ */
 class GitHubCardsInfoServiceTest extends UnitTestCase {
 
   /**
@@ -23,10 +28,23 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
    */
   protected $container;
 
+  /**
+   * The randomly generated username to use for testing.
+   *
+   * @var string
+   */
   protected $testUserName;
 
+  /**
+   * The randomly generated repository name to use for testing.
+   *
+   * @var string
+   */
   protected $testRepoName;
 
+  /**
+   * Validate we can properly parse a resource URL.
+   */
   public function testParseResourceUrl() {
     $ghc = GitHubCardsInfoService::create($this->container);
 
@@ -70,6 +88,9 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     }
   }
 
+  /**
+   * Validate we can get user information by URL.
+   */
   public function testGetUserInfoByUrl() {
     $ghc = GitHubCardsInfoService::create($this->container);
 
@@ -78,17 +99,9 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     $this->assertFalse($ghc->getUserInfoByUrl(''));
   }
 
-  protected function getUserInfo($userName) {
-    return [
-      'login' => $userName,
-      'id' => 1234,
-      'public_repos' => 24,
-      'public_gists' => 24,
-      'followers' => 7,
-      'following' => 3,
-    ];
-  }
-
+  /**
+   * Validate we can get repository information by URL.
+   */
   public function testGetRepoInfoByUrl() {
     $ghc = GitHubCardsInfoService::create($this->container);
 
@@ -97,6 +110,9 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     $this->assertFalse($ghc->getUserInfoByUrl(''));
   }
 
+  /**
+   * Validate we can get the expected user information.
+   */
   public function testGetUserInfo() {
     $ghc = GitHubCardsInfoService::create($this->container);
 
@@ -105,6 +121,9 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     $this->assertFalse($ghc->getUserInfo(FALSE));
   }
 
+  /**
+   * Validate we can get the expected repository information.
+   */
   public function testGetRepositoryInfo() {
     $ghc = GitHubCardsInfoService::create($this->container);
 
@@ -116,17 +135,9 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     $this->assertFalse($ghc->getRepositoryInfo($this->testUserName, FALSE));
   }
 
-  protected function getRepoInfo($userName, $repoName) {
-    return [
-      'id' => 7890,
-      'name' => $repoName,
-      'full_name' => $userName . '/' . $repoName,
-      'forks_count' => 13,
-      'stargazers_count' => 3,
-      'watchers_count' => 2,
-    ];
-  }
-
+  /**
+   * Validate we can get a GitHub client.
+   */
   public function testGetClient() {
     $ghc = GitHubCardsInfoService::create($this->container);
     $this->assertInstanceOf(Client::class, $ghc->getClient());
@@ -166,6 +177,17 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     Drupal::setContainer($this->container);
   }
 
+  /**
+   * Get a mocked GitHub Client for testing with.
+   *
+   * @param string $userName
+   *   The username to set for the client response.
+   * @param string $repoName
+   *   The repository name to set for the client response.
+   *
+   * @return \PHPUnit\Framework\MockObject\MockObject|\Github\Client
+   *   A mocked GitHub Client.
+   */
   protected function getMockedGitHubClient($userName, $repoName) {
     $github_client = $this->getMockBuilder(Client::class)
       ->disableOriginalConstructor()
@@ -196,6 +218,48 @@ class GitHubCardsInfoServiceTest extends UnitTestCase {
     $github_client->method('repository')->willReturn($github_repo);
 
     return $github_client;
+  }
+
+  /**
+   * Provide minimal user information for testing against.
+   *
+   * @param string $userName
+   *   The GitHub username to use.
+   *
+   * @return array
+   *   An array of minimal user information to fake a response.
+   */
+  protected function getUserInfo($userName) {
+    return [
+      'login' => $userName,
+      'id' => 1234,
+      'public_repos' => 24,
+      'public_gists' => 24,
+      'followers' => 7,
+      'following' => 3,
+    ];
+  }
+
+  /**
+   * Provide minimal repository information for testing against.
+   *
+   * @param string $userName
+   *   The repository owner's name.
+   * @param string $repoName
+   *   The repository name.
+   *
+   * @return array
+   *   An array of minimal repository information to fake a response.
+   */
+  protected function getRepoInfo($userName, $repoName) {
+    return [
+      'id' => 7890,
+      'name' => $repoName,
+      'full_name' => $userName . '/' . $repoName,
+      'forks_count' => 13,
+      'stargazers_count' => 3,
+      'watchers_count' => 2,
+    ];
   }
 
 }

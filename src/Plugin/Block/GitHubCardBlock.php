@@ -49,14 +49,14 @@ class GitHubCardBlock extends BlockBase implements BlockPluginInterface, Contain
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
     $this->gitHubCardStorage = $entity_type_manager->getStorage('github_card');
   }
 
   /**
-   * {@inheritdoc}}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static($configuration, $plugin_id, $plugin_definition, $container->get('entity_type.manager'));
@@ -114,9 +114,9 @@ class GitHubCardBlock extends BlockBase implements BlockPluginInterface, Contain
    */
   public function defaultConfiguration() {
     return parent::defaultConfiguration() + [
-        'github_card' => NULL,
-        'label_display' => FALSE,
-      ];
+      'github_card' => NULL,
+      'label_display' => FALSE,
+    ];
   }
 
 }

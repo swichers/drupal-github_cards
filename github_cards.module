@@ -65,9 +65,6 @@ function github_cards_theme($existing, $type, $theme, $path) {
  */
 function github_cards_preprocess_github_card(array &$variables) {
 
-  /** @var \Drupal\github_cards\Service\GitHubCardsInfoService $info_service */
-  $info_service = \Drupal::service('github_cards.github_info');
-
   /** @var \Drupal\github_cards\Entity\GitHubCardEntityInterface $card */
   $card = $variables['elements']['#github_card'];
   $card_info = $card->fetchResourceData();

@@ -68,7 +68,7 @@ interface GitHubCardEntityInterface extends ContentEntityInterface, EntityChange
    * Set the GitHub Card owner user ID.
    *
    * @param int $uid
-   *  The GitHub Card owner user ID.
+   *   The GitHub Card owner user ID.
    *
    * @return \Drupal\github_cards\Entity\GitHubCardEntityInterface
    *   The called GitHub Card entity.
@@ -78,7 +78,7 @@ interface GitHubCardEntityInterface extends ContentEntityInterface, EntityChange
   /**
    * Get the GitHub Card owner account.
    *
-   * @return UserInterface
+   * @return \Drupal\user\UserInterface
    *   The GitHub Card owner account.
    */
   public function getOwner();
@@ -86,7 +86,7 @@ interface GitHubCardEntityInterface extends ContentEntityInterface, EntityChange
   /**
    * Set the GitHub Card owner account.
    *
-   * @param UserInterface $account
+   * @param \Drupal\user\UserInterface $account
    *   The GitHub Card owner account.
    *
    * @return \Drupal\github_cards\Entity\GitHubCardEntityInterface

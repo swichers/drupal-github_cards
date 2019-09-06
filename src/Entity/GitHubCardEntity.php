@@ -303,6 +303,7 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
    * Get an instance of the GitHub Cards Info Service.
    *
    * @return \Drupal\github_cards\Service\GitHubCardsInfoServiceInterface
+   *   An instance of the GitHub Cards Info service.
    */
   protected function getGitHubCardsInfoService() {
     return \Drupal::service('github_cards.github_info');

@@ -6,8 +6,16 @@ use Drupal\github_cards\Service\GitHubCardsClientFactory;
 use Drupal\Tests\UnitTestCase;
 use Github\Client;
 
+/**
+ * Class GitHubCardsClientFactoryTest.
+ *
+ * @package Drupal\Tests\github_cards\Unit\Service
+ */
 class GitHubCardsClientFactoryTest extends UnitTestCase {
 
+  /**
+   * Validate we can get an instance of a GitHub client.
+   */
   public function testCreateGitHubClient() {
     $this->assertInstanceOf(Client::class, GitHubCardsClientFactory::createGitHubClient());
   }

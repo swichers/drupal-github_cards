@@ -34,7 +34,7 @@ class GitHubCardEntityForm extends ContentEntityForm {
    * @param \Drupal\Core\Session\AccountProxyInterface $account
    *   The current user account.
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, AccountProxyInterface $account) {
+  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, AccountProxyInterface $account = NULL) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
 
     $this->account = $account;
@@ -45,18 +45,11 @@ class GitHubCardEntityForm extends ContentEntityForm {
    */
   public static function create(ContainerInterface $container) {
     // Instantiates this form class.
-    return new static($container->get('entity.repository'), $container->get('entity_type.bundle.info'), $container->get('datetime.time'), $container->get('current_user'));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function form(array $form, FormStateInterface $form_state) {
-    $form = parent::form($form, $form_state);
-    /** @var \Drupal\github_cards\Entity\GitHubCardEntityInterface $github_card */
-    $github_card = $this->entity;
-
-    return $form;
+    return new static(
+      $container->get('entity.repository'),
+      $container->get('entity_type.bundle.info'),
+      $container->get('datetime.time'),
+      $container->get('current_user'));
   }
 
   /**

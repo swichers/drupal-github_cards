@@ -7,7 +7,6 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\github_cards\Entity\GitHubCardEntityInterface;
 use Github\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -31,11 +30,13 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
   protected $entityTypeManager;
 
   /**
+   * Drupal logger channel.
+   *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $loggerChannel;
 
-  /*
+  /**
    * Drupal Time service.
    *
    * @var \Drupal\Component\Datetime\TimeInterface
@@ -53,10 +54,15 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
    * Constructs a new GitHubCardsInfoService object.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_default
+   *   Instance of a cache backend.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   * @param \Drupal\Core\Logger\LoggerChannelInterface|object $logger_channel
-   * @param \Drupal\Component\Datetime\TimeInterface|object $time
+   *   Instance of an entity type manager.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger_channel
+   *   Instance of a logger channel.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   Instance of a time service.
    * @param \Github\Client $github_client
+   *   Instance of a GitHub client.
    */
   public function __construct(CacheBackendInterface $cache_default, EntityTypeManagerInterface $entity_type_manager, LoggerChannelInterface $logger_channel, TimeInterface $time, Client $github_client) {
     $this->cacheDefault = $cache_default;
@@ -66,6 +72,15 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
     $this->githubClient = $github_client;
   }
 
+  /**
+   * Create a GitHubCardsInfo service object.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   A Drupal service container.
+   *
+   * @return \Drupal\github_cards\Service\GitHubCardsInfoService
+   *   An instance of a GitHubCardsInfo service.
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('cache.default'),
@@ -77,7 +92,7 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
   }
 
   /**
-   * {@inheritdoc}}
+   * {@inheritdoc}
    */
   public function getClient() {
     return $this->githubClient;
@@ -126,14 +141,14 @@ class GitHubCardsInfoService implements ContainerInjectionInterface, GitHubCards
   }
 
   /**
-   * {@inheritdoc}}
+   * {@inheritdoc}
    */
   public function getUserInfo($userName) {
     return $this->getRemoteInfo($userName);
   }
 
   /**
-   * {@inheritdoc}}
+   * {@inheritdoc}
    */
   public function getRepositoryInfo($userName, $repoName) {
     return $this->getRemoteInfo($userName, $repoName ?: FALSE);
