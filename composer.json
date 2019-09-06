@@ -2,16 +2,44 @@
     "name": "drupal/github_cards",
     "type": "drupal-module",
     "description": "GitHub user and repo cards.",
+    "license": "GPL-3.0",
     "keywords": [
+        "drupal",
+        "github",
+        "drupal-8",
+        "module"
+    ],
+    "authors": [
+        {
+            "name": "Steven Wichers",
+            "email": "me@stevenwichers.com",
+            "homepage": "https://stevenwichers.com"
+        }
     ],
     "homepage": "https://www.drupal.org/project/github_cards",
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "support": {
         "issues": "https://www.drupal.org/project/issues/github_cards",
         "source": "http://cgit.drupalcode.org/github_cards"
     },
     "require": {
         "knplabs/github-api": "^2.12@dev",
-        "php-http/guzzle6-adapter": "^1.1"
+        "php-http/guzzle6-adapter": "^1.1",
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*",
+        "drupal/coder": "^8.3",
+        "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
+        "phpunit/phpunit": "^6.5"
+    },
+    "scripts": {
+        "phpcs": [
+            "./vendor/bin/phpcs"
+        ],
+        "phpunit": [
+            "./vendor/bin/phpunit --colors=always"
+        ]
     }
 }
