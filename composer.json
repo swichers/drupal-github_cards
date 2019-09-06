@@ -41,5 +41,10 @@
         "phpunit": [
             "./vendor/bin/phpunit --colors=always"
         ]
+    },
+    "config": {
+        "platform": {
+            "php": "7.1"
+        }
     }
 }

@@ -9,18 +9,36 @@ git:
   quiet: true
   depth: false
 
-branches:
-  only:
-    - master
-    - develop
+env:
+  global:
+    - MODULE_NAME='github_cards'
+    - SIMPLETEST_BASE_URL='http://127.0.0.1:8080'
+    # Ignore Symfony's deprecation notices.
+    - SYMFONY_DEPRECATIONS_HELPER=weak
+
+before_install:
+  - composer self-update
+  - composer global require hirak/prestissimo
+  - composer global require drupal/coder dealerdirect/phpcodesniffer-composer-installer
+  - phpenv config-rm xdebug.ini
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - phpenv rehash
 
 install:
-  - composer self-update
-  - composer install --no-interaction
+  # Download and install Drupal Composer.
+  - cd .. && composer create-project drupal-composer/drupal-project:8.x-dev drupal --stability dev --no-interaction
+  - cd drupal
+  - composer require 'knplabs/github-api:^2.12@dev' 'php-http/guzzle6-adapter:^1.1'
+  - composer install
+
+  # Create symlink to add module to drupal site.
+  - ln -s $TRAVIS_BUILD_DIR web/modules/$MODULE_NAME
 
 script:
-  - php vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
-  - php vendor/bin/phpcs
+  - cd web && php ../vendor/bin/phpunit -c core/phpunit.xml.dist modules/$MODULE_NAME
+  - cd $TRAVIS_BUILD_DIR && ../drupal/vendor/bin/phpcs
+#  - php ../vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
+
 
 after_script:
-  - php vendor/bin/codacycoverage clover ./build/logs/clover.xml
+#  - php vendor/bin/codacycoverage clover ./build/logs/clover.xml
