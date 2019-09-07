@@ -18,6 +18,7 @@ use Github\Client;
  * Class GitHubCardsInfoServiceTest.
  *
  * @package Drupal\Tests\github_cards\Unit\Service
+ * @group github_cards
  */
 class GitHubCardsInfoServiceTest extends UnitTestCase {
 
