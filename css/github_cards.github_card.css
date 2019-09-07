@@ -10,7 +10,7 @@
   box-shadow: 2px 3px rgba(228, 228, 228, 0.7);
 }
 
-.github-card a.match-coloring {
+.github-card .match-coloring {
   color: #7d7d7d;
 }
 
@@ -102,7 +102,7 @@ ul.status.small li .count {
   color: #000;
 }
 
-.github-card footer p.description {
+.github-card footer .description {
   margin-bottom: 0;
   padding-bottom: 0;
   padding-top: 0.5em;
