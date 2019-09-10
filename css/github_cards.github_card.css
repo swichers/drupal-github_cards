@@ -62,26 +62,22 @@
   border-bottom: thin solid #e4e4e4;
 }
 
-ul.status.small {
+.github-card ul.status.small {
   border: none;
   justify-content: unset;
 }
 
-ul.status.small li {
-  border: none;
-  flex-grow: unset;
-}
-
-ul.status.small li .count {
-  display: inline;
-  margin-right: 0.25em;
-}
 
 .github-card ul.status li {
   padding: 0.5em;
   border-right: thin solid #e4e4e4;
   text-transform: uppercase;
   flex-grow: 1;
+}
+
+.github-card ul.status.small li {
+  border: none;
+  flex-grow: unset;
 }
 
 .github-card ul.status li:last-of-type {
@@ -100,6 +96,11 @@ ul.status.small li .count {
   font-weight: bold;
   display: block;
   color: #000;
+}
+
+.github-card ul.status.small li .count {
+  display: inline;
+  margin-right: 0.25em;
 }
 
 .github-card footer .description {
