@@ -9,6 +9,6 @@ The functionality is inspired by the Unofficial GitHub Cards project by lepture.
 * <https://lab.lepture.com/github-cards/>
 * <https://github.com/lepture/github-cards>
 
-![Build Status](https://travis-ci.com/swichers/drupal-github_cards.svg?branch=8.x-1.x)
-![Code Quality](https://api.codacy.com/project/badge/Grade/3958f8ce64124e3098debadfd969ecf6)
-![Code Coverage](https://api.codacy.com/project/badge/Coverage/3958f8ce64124e3098debadfd969ecf6)
+[![Build Status](https://travis-ci.com/swichers/drupal-github_cards.svg?branch=8.x-1.x)](https://travis-ci.com/swichers/drupal-github_cards)
+[![Code Quality](https://api.codacy.com/project/badge/Grade/3958f8ce64124e3098debadfd969ecf6)](https://www.codacy.com/manual/swichers/drupal-github_cards)
+[![Code Coverage](https://api.codacy.com/project/badge/Coverage/3958f8ce64124e3098debadfd969ecf6)](https://www.codacy.com/manual/swichers/drupal-github_cards)
