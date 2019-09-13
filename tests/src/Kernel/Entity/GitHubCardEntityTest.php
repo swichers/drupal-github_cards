@@ -50,12 +50,13 @@ class GitHubCardEntityTest extends EntityKernelTestBase {
    *   The simple entity.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   protected function getCardEntity(string $resourceUrl = NULL, bool $save = FALSE):GitHubCardEntityInterface {
     $user = $this->createUser();
 
-    $container = \Drupal::getContainer();
-    $container->get('current_user')->setAccount($user);
+    $this->container->get('current_user')->setAccount($user);
 
     $card = GitHubCardEntity::create([
       'title' => $this->randomString(),
@@ -91,8 +92,7 @@ class GitHubCardEntityTest extends EntityKernelTestBase {
    */
   public function testOwnerId() {
     $card = $this->getCardEntity();
-    /** @var \Drupal\Core\Session\AccountProxy $user */
-    $user = \Drupal::service('current_user');
+    $user = $this->container->get('current_user');
 
     $this->assertEquals($user->id(), $card->getOwnerId());
 
@@ -109,7 +109,7 @@ class GitHubCardEntityTest extends EntityKernelTestBase {
    */
   public function testOwner() {
     $card = $this->getCardEntity();
-    $user = \Drupal::service('current_user');
+    $user = $this->container->get('current_user');
 
     $this->assertInstanceOf(UserInterface::class, $card->getOwner());
     $this->assertEquals($user->getAccountName(), $card->getOwner()
@@ -286,10 +286,7 @@ class GitHubCardEntityTest extends EntityKernelTestBase {
       ],
     ]);
 
-    /** @var \Drupal\Component\DependencyInjection\Container|\Drupal\Core\DependencyInjection\ContainerInjectionInterface $container */
-    $container = \Drupal::getContainer();
-    $container->set('github_cards.github_info', $mock_info);
-    \Drupal::setContainer($container);
+    $this->container->set('github_cards.github_info', $mock_info);
   }
 
 }

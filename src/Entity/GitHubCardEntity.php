@@ -66,6 +66,8 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   public static function preCreate(EntityStorageInterface $storage_controller, array &$values) {
     parent::preCreate($storage_controller, $values);
@@ -313,6 +315,8 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
    *
    * @return \Drupal\github_cards\Service\GitHubCardsInfoServiceInterface
    *   An instance of the GitHub Cards Info service.
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   protected function getGitHubCardsInfoService() {
     return \Drupal::service('github_cards.github_info');
