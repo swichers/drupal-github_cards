@@ -9,3 +9,5 @@ acquia/coding-standards:
 drupal/github_cards:
   version_dev: "1.x"
   url: ../drupal-github_cards
+
+codacy/coverage: []
