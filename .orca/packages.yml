@@ -1,0 +1,11 @@
+---
+acquia/blt:
+  type: composer-plugin
+
+acquia/coding-standards:
+  type: phpcodesniffer-standard
+  url: ../coding-standards-php
+
+drupal/github_cards:
+  version_dev: "1.x"
+  url: ../drupal-github_cards

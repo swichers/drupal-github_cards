@@ -2,12 +2,12 @@
 
 namespace Drupal\github_cards\Entity;
 
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\user\UserInterface;
 
 /**
@@ -66,22 +66,28 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   public static function preCreate(EntityStorageInterface $storage_controller, array &$values) {
     parent::preCreate($storage_controller, $values);
     $values += [
       'user_id' => \Drupal::currentUser()->id(),
     ];
+
+    if (isset($values['resource'])) {
+      /** @var \Drupal\github_cards\Service\GitHubCardsInfoServiceInterface $info_service */
+      $info_service = \Drupal::service('github_cards.github_info');
+      $values['resource_type'] = $info_service->parseResourceUrl($values['resource'])['type'] ?? 'invalid';
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
-    $resource_info = $this->getResourceInfo();
-    $this->setResourceType($resource_info['type'] ?? 'invalid');
-
     parent::preSave($storage);
+    $this->setResourceTypeFromResource();
   }
 
   /**
@@ -148,7 +154,11 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
    * {@inheritdoc}
    */
   public function setResourceType($resourceType) {
-    $this->set('resource_type', $resourceType);
+    /** @var \Drupal\Core\Field\FieldDefinitionInterface $definition */
+    $definition = $this->fieldDefinitions['resource_type'];
+    $allowed_values = $definition->getSetting('allowed_values');
+    $new_type = isset($allowed_values[$resourceType]) ? $resourceType : 'invalid';
+    $this->set('resource_type', $new_type);
     return $this;
   }
 
@@ -164,6 +174,7 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
    */
   public function setResource($resource) {
     $this->set('resource', $resource);
+    $this->setResourceTypeFromResource();
     return $this;
   }
 
@@ -304,6 +315,8 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
    *
    * @return \Drupal\github_cards\Service\GitHubCardsInfoServiceInterface
    *   An instance of the GitHub Cards Info service.
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   protected function getGitHubCardsInfoService() {
     return \Drupal::service('github_cards.github_info');
@@ -318,6 +331,13 @@ class GitHubCardEntity extends ContentEntityBase implements GitHubCardEntityInte
   protected function getResourceInfo() {
     return $this->getGitHubCardsInfoService()
       ->parseResourceUrl($this->getResource());
+  }
+
+  /**
+   * Sets the resource type based on the current resource value.
+   */
+  protected function setResourceTypeFromResource() {
+    $this->setResourceType($this->getResourceInfo()['type'] ?? 'invalid');
   }
 
 }

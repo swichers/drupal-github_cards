@@ -10,7 +10,10 @@ use Github\Client;
  * Class GitHubCardsClientFactoryTest.
  *
  * @package Drupal\Tests\github_cards\Unit\Service
+ *
  * @group github_cards
+ *
+ * @coversDefaultClass \Drupal\github_cards\Service\GitHubCardsClientFactory
  */
 class GitHubCardsClientFactoryTest extends UnitTestCase {
 

@@ -1,45 +1,55 @@
+---
 language: php
 
-php:
-  - '7.1'
-  - '7.2'
-  - '7.3'
+php: "7.2"
 
-git:
-  quiet: true
-  depth: false
+addons:
+  chrome: stable
+
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+    - "$HOME/.drush/cache"
+    - "${TMPDIR:-/tmp}/phpstan/cache"
 
 env:
   global:
-    - MODULE_NAME='github_cards'
-    - SIMPLETEST_BASE_URL='http://127.0.0.1:8080'
-    # Ignore Symfony's deprecation notices.
-    - SYMFONY_DEPRECATIONS_HELPER=weak
+    - ORCA_SUT_NAME=drupal/github_cards
+    - ORCA_SUT_BRANCH=8.x-1.x
+    - ORCA_VERSION=master
+    - ORCA_TELEMETRY_ENABLE=FALSE
+    - ORCA_PACKAGES_CONFIG=../drupal-github_cards/.orca/packages.yml
+
+matrix:
+  fast_finish: true
+  include:
+    - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
+    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN }
+    - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED }
+    - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
+    - { name: "Integrated test w/ recommended package versions & previous minor release of Drupal core", env: ORCA_JOB=CORE_PREVIOUS }
+    - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
+    - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
+    - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
+  allow_failures:
+    - env: ORCA_JOB=ISOLATED_DEV
+    - env: ORCA_JOB=INTEGRATED_DEV
+    - env: ORCA_JOB=CORE_NEXT
 
 before_install:
-  - composer self-update
-  - composer global require hirak/prestissimo
-  - composer global require drupal/coder dealerdirect/phpcodesniffer-composer-installer
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - phpenv rehash
+  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - ../orca/bin/travis/before_install.sh
 
-install:
-  # Download and install Drupal Composer.
-  - cd .. && composer create-project drupal-composer/drupal-project:8.x-dev drupal --stability dev --no-interaction
-  - cd drupal
-  # Add in module dependencies.
-  - composer require 'knplabs/github-api:^2.12@dev' 'php-http/guzzle6-adapter:^1.1'
-  - composer require --dev 'codacy/coverage:dev-master'
-  - composer install
+install: ../orca/bin/travis/install.sh
 
-  # Create symlink to add module to drupal site.
-  - ln -s $TRAVIS_BUILD_DIR web/modules/$MODULE_NAME
+before_script: ../orca/bin/travis/before_script.sh
 
-script:
-  - cd web && php ../vendor/bin/phpunit -c core/phpunit.xml.dist modules/$MODULE_NAME
-  - php ../vendor/bin/phpunit -c core/phpunit.xml.dist --coverage-clover $TRAVIS_BUILD_DIR/../build/logs/clover.xml modules/$MODULE_NAME
-  - cd $TRAVIS_BUILD_DIR && ../drupal/vendor/bin/phpcs
+script: ../orca/bin/travis/script.sh
 
+before_cache: ../orca/bin/travis/before_cache.sh
 
-after_script:
-  - php ../drupal/vendor/bin/codacycoverage clover ../build/logs/clover.xml
+after_success: ../orca/bin/travis/after_success.sh
+
+after_failure: ../orca/bin/travis/after_failure.sh
+
+after_script: ../orca/bin/travis/after_script.sh
