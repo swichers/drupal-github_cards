@@ -1,8 +1,7 @@
 name: 'GitHub Cards'
 type: module
 description: 'GitHub user and repo cards.'
-core_version_requirement: ^8
-core: 8.x
+core_version_requirement: ^8.9 || ^9
 package: 'GitHub'
 dependencies:
   - drupal:block
