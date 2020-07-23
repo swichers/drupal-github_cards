@@ -23,12 +23,7 @@ env:
     - ORCA_SUT_NAME=drupal/github_cards
     - ORCA_SUT_BRANCH=8.x-1.x
     - ORCA_VERSION=^2
-    # If your package isn't in ORCA's packages.yml or conflicts with details
-    # that are, you can modify the active packages configuration at runtime by
-    # uncommenting the following line and specifying your own alter file.
-    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PACKAGES_CONFIG_ALTER
-    # - ORCA_PACKAGES_CONFIG_ALTER=.orca/packages.yml
-    #
+    - ORCA_PACKAGES_CONFIG=../drupal-github_cards/.orca/packages.yml
     # Change the PHP Code Sniffer standard used for static analysis. Acceptable
     # values are "AcquiaPHP", "AcquiaDrupalStrict", and
     # "AcquiaDrupalTransitional". Defaults to "AcquiaDrupalTransitional".
