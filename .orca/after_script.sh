@@ -14,5 +14,5 @@ source ../../orca/bin/travis/_includes.sh
 
 if [[ "${ORCA_COLLECT_COVERAGE}" == "TRUE" ]]; then
   composer -d"${TRAVIS_BUILD_DIR}" require --dev 'codacy/coverage:dev-master'
-  "${TRAVIS_BUILD_DIR}/vendor/bin/codacycoverage" clover --git-commit ${TRAVIS_COMMIT} "${ORCA_ROOT}/var/coverage/github_cards/clover.xml"
+  "${TRAVIS_BUILD_DIR}/vendor/bin/codacycoverage" clover --git-commit ${TRAVIS_COMMIT} "${ORCA_COVERAGE_PATH}/clover.xml"
 fi

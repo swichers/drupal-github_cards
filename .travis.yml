@@ -26,6 +26,7 @@ env:
     - ORCA_PACKAGES_CONFIG=../drupal-github_cards/.orca/packages.yml
     - ORCA_PHPCS_STANDARD=AcquiaDrupalStrict
     - ORCA_TELEMETRY_ENABLE=FALSE
+    - ORCA_COVERAGE_PATH=/tmp
 
 jobs:
   fast_finish: true
