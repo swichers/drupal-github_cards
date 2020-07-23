@@ -22,7 +22,7 @@ env:
   global:
     - ORCA_SUT_NAME=drupal/github_cards
     - ORCA_SUT_BRANCH=8.x-1.x
-    - ORCA_VERSION=^2
+    - ORCA_VERSION=phpunit-coverage
     - ORCA_PACKAGES_CONFIG=../drupal-github_cards/.orca/packages.yml
     - ORCA_PHPCS_STANDARD=AcquiaDrupalStrict
     - ORCA_TELEMETRY_ENABLE=FALSE
@@ -32,7 +32,7 @@ jobs:
   include:
     - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN }
-    - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED }
+    - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED ORCA_COLLECT_COVERAGE="TRUE" }
     - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
     - { name: "Integrated test w/ recommended package versions & previous minor release of Drupal core", env: ORCA_JOB=CORE_PREVIOUS }
     - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
@@ -46,7 +46,7 @@ jobs:
 
 before_install:
   - nvm use 12.13.1
-  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
+  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/swichers/orca.git ../orca
   - ../orca/bin/travis/before_install.sh
 
 install: ../orca/bin/travis/install.sh

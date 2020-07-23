@@ -12,9 +12,7 @@
 cd "$(dirname "$0")" || exit
 source ../../orca/bin/travis/_includes.sh
 
-
-
-if [[ "${ORCA_JOB}" == "ISOLATED_RECOMMENDED" ]]; then
+if [[ "${ORCA_COLLECT_COVERAGE}" == "TRUE" ]]; then
   composer -d"${TRAVIS_BUILD_DIR}" require --dev 'codacy/coverage:dev-master'
   "${TRAVIS_BUILD_DIR}/vendor/bin/codacycoverage" clover --git-commit ${TRAVIS_COMMIT} "${ORCA_ROOT}/var/coverage/github_cards/clover.xml"
 fi
