@@ -24,11 +24,7 @@ env:
     - ORCA_SUT_BRANCH=8.x-1.x
     - ORCA_VERSION=^2
     - ORCA_PACKAGES_CONFIG=../drupal-github_cards/.orca/packages.yml
-    # Change the PHP Code Sniffer standard used for static analysis. Acceptable
-    # values are "AcquiaPHP", "AcquiaDrupalStrict", and
-    # "AcquiaDrupalTransitional". Defaults to "AcquiaDrupalTransitional".
-    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PHPCS_STANDARD
-    # - ORCA_PHPCS_STANDARD=AcquiaDrupalTransitional
+    - ORCA_PHPCS_STANDARD=AcquiaDrupalStrict
     - ORCA_TELEMETRY_ENABLE=FALSE
 
 jobs:
