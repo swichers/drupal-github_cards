@@ -29,6 +29,8 @@ class GitHubCardEntityListBuilder extends EntityListBuilder {
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   public function buildRow(EntityInterface $entity) {
 
