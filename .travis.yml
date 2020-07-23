@@ -1,7 +1,12 @@
 ---
 language: php
 
-php: "7.2"
+os: linux
+dist: bionic
+
+version: ~> 1.0
+
+php: "7.4"
 
 addons:
   chrome: stable
@@ -10,17 +15,28 @@ cache:
   directories:
     - "$HOME/.composer/cache"
     - "$HOME/.drush/cache"
+    - "$HOME/.rvm"
     - "${TMPDIR:-/tmp}/phpstan/cache"
 
 env:
   global:
     - ORCA_SUT_NAME=drupal/github_cards
     - ORCA_SUT_BRANCH=8.x-1.x
-    - ORCA_VERSION=feature/phpunit-coverage
+    - ORCA_VERSION=^2
+    # If your package isn't in ORCA's packages.yml or conflicts with details
+    # that are, you can modify the active packages configuration at runtime by
+    # uncommenting the following line and specifying your own alter file.
+    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PACKAGES_CONFIG_ALTER
+    # - ORCA_PACKAGES_CONFIG_ALTER=.orca/packages.yml
+    #
+    # Change the PHP Code Sniffer standard used for static analysis. Acceptable
+    # values are "AcquiaPHP", "AcquiaDrupalStrict", and
+    # "AcquiaDrupalTransitional". Defaults to "AcquiaDrupalTransitional".
+    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PHPCS_STANDARD
+    # - ORCA_PHPCS_STANDARD=AcquiaDrupalTransitional
     - ORCA_TELEMETRY_ENABLE=FALSE
-    - ORCA_PACKAGES_CONFIG=../drupal-github_cards/.orca/packages.yml
 
-matrix:
+jobs:
   fast_finish: true
   include:
     - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
@@ -31,13 +47,19 @@ matrix:
     - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
     - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
     - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
+    - { name: "D9 readiness test", php: "7.3", env: ORCA_JOB=D9_READINESS}
+    # Custom testing needs involving only minor variations on the standard setup
+    # can be achieved without custom scripting using the "CUSTOM" ORCA_JOB.
+    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#travis-ci-scripts
+    # - { name: "Custom job", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--profile=lightning" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" }
   allow_failures:
     - env: ORCA_JOB=ISOLATED_DEV
     - env: ORCA_JOB=INTEGRATED_DEV
     - env: ORCA_JOB=CORE_NEXT
 
 before_install:
-  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - nvm use 12.13.1
+  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 
 install: ../orca/bin/travis/install.sh
@@ -52,4 +74,4 @@ after_success: ../orca/bin/travis/after_success.sh
 
 after_failure: ../orca/bin/travis/after_failure.sh
 
-after_script:  .orca/after_script.sh
+after_script: ../orca/bin/travis/after_script.sh
