@@ -39,10 +39,6 @@ jobs:
     - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
     - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
     - { name: "D9 readiness test", php: "7.3", env: ORCA_JOB=D9_READINESS}
-    # Custom testing needs involving only minor variations on the standard setup
-    # can be achieved without custom scripting using the "CUSTOM" ORCA_JOB.
-    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#travis-ci-scripts
-    # - { name: "Custom job", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--profile=lightning" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" }
   allow_failures:
     - env: ORCA_JOB=ISOLATED_DEV
     - env: ORCA_JOB=INTEGRATED_DEV
