@@ -17,6 +17,7 @@ class GitHubCardEntityListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
+    $header = [];
     $header['id'] = $this->t('ID');
     $header['name'] = $this->t('Label');
     $header['resource_type'] = $this->t('Type');
@@ -28,8 +29,12 @@ class GitHubCardEntityListBuilder extends EntityListBuilder {
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   public function buildRow(EntityInterface $entity) {
+
+    $row = [];
 
     /* @var \Drupal\github_cards\Entity\GitHubCardEntity $entity */
     $row['id'] = $entity->id();

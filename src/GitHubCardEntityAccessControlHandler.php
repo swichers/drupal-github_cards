@@ -16,6 +16,8 @@ class GitHubCardEntityAccessControlHandler extends EntityAccessControlHandler {
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
     /** @var \Drupal\github_cards\Entity\GitHubCardEntityInterface $entity */
@@ -39,6 +41,8 @@ class GitHubCardEntityAccessControlHandler extends EntityAccessControlHandler {
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.StaticAccess)
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
     return AccessResult::allowedIfHasPermission($account, 'add github card entities');

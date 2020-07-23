@@ -1,6 +1,7 @@
 name: 'GitHub Cards'
 type: module
 description: 'GitHub user and repo cards.'
+core_version_requirement: ^8
 core: 8.x
 package: 'GitHub'
 dependencies:
