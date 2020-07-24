@@ -1,0 +1,4 @@
+entity.github_card.collection:
+  title: 'GitHub Cards'
+  route_name: entity.github_card.collection
+  base_route: system.admin_content
