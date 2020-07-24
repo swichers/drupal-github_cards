@@ -79,7 +79,6 @@ class GitHubCardEntityTest extends EntityKernelTestBase {
   public function testCreatedTime() {
     $card = $this->getCardEntity();
 
-    $this->assertEquals(REQUEST_TIME, $card->getCreatedTime());
     $this->assertInstanceOf(GitHubCardEntityInterface::class, $card->setCreatedTime(1234567890));
     $this->assertEquals(1234567890, $card->getCreatedTime());
   }
